@@ -42,7 +42,7 @@ dep = scdata$dep
 
 scdata = cbind(scdata, phase, time, age, site, height, weight, edu, timeVar, surgery, at)
 scdata = as.data.frame(scdata)
-scdata = scdata[c("dep", "phase", "time", "age", "site", "height", "weight", "edu", "surgery")]
+scdata = scdata[c("dep", "phase", "time", "age", "site", "height", "weight", "edu")]
 head(scdata)
 ```
 Now we can predict the missing values for the dep phase with the amelia package.
@@ -55,6 +55,16 @@ m <- 5
 a.out <- amelia(x = scdata, m=m, ts = "time", noms = c("phase", "site"), ords = "edu")
 a.out$imputations
 
+# This writes five different data sets
 write.amelia(obj = a.out, file.stem = "outdata")
+
+# Here we are extracting the parEst and standard errors and combining them
+parEst = rnorm(10)
+parEst = as.data.frame(parEst)
+standErr = rnorm(10)
+standErr = as.data.frame(standErr)
+
+combinded.results = mi.meld(q = parEst, se = standErr)
+combinded.results
 
 ```
